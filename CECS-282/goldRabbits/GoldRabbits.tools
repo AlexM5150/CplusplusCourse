@@ -1,0 +1,84 @@
+#include "BigInt.h"
+#include <map>
+#include <iterator>
+
+
+
+int goldRabbits(int n) {
+    static map<int,int> rabbitMap;
+    map<int,int>:: iterator it1;
+    map<int,int>:: iterator it2;
+    int n1;
+    int n2;
+
+    if(n == 0 || n == 1) {
+        if(rabbitMap.find(n) == rabbitMap.end()) {
+            rabbitMap[n] = 1;
+        }
+        
+        return rabbitMap[n];
+    }
+    else {
+        it1 = rabbitMap.find(n - 1);
+        if(it1 == rabbitMap.end()) {
+            n1 = goldRabbits(n - 1);
+            rabbitMap.insert({n - 1, n1});
+        }
+        else {
+            n1 = it1->second;
+        }
+        
+        it2 = rabbitMap.find(n - 2);
+        if(it2 == rabbitMap.end()) {
+            n2 = goldRabbits(n - 2);
+            rabbitMap.insert({n - 2, n2});
+        }
+        else {
+            n2 = it2->second;
+        }
+
+        int sum = n1 + n2;
+        string error = "Overflow Error - goldRabbits overflowed using " + to_string(n);
+        if(sum < 0) 
+            throw error; 
+        return sum;
+    }
+}
+
+
+BigInt goldRabbits(BigInt big) {
+    static map<BigInt,BigInt> rabbitMap;
+    map<BigInt,BigInt>:: iterator it1;
+    map<BigInt,BigInt>:: iterator it2;
+    BigInt n1;
+    BigInt n2;
+
+    if(big == 0 || big == 1) {
+        if(rabbitMap.find(big) == rabbitMap.end()) {
+            rabbitMap[big] = BigInt(1);
+        }
+        
+        return rabbitMap[big];
+    }
+    else {
+        it1 = rabbitMap.find(big - 1);
+        if(it1 == rabbitMap.end()) {
+            n1 = goldRabbits(big - 1);
+            rabbitMap.insert({big - 1, n1});
+        }
+        else {
+            n1 = it1->second;
+        }
+        
+        it2 = rabbitMap.find(big - 2);
+        if(it2 == rabbitMap.end()) {
+            n2 = goldRabbits(big - 2);
+            rabbitMap.insert({big - 2, n2});
+        }
+        else {
+            n2 = it2->second;
+        }
+
+        return n1 + n2;
+    }
+}
